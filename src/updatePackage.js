@@ -56,11 +56,13 @@ function writePackage(package) {
 }
 
 module.exports = function (answers) {
+  console.log('Updating package.json...')
   return readFile(packageFile)
     .then(parsePackage)
     .then(updatePackage(answers))
     .then(writePackage)
     .then(function() {
+      console.log('package.json updated!')
       return answers
     })
 }
