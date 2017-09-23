@@ -25,6 +25,7 @@
   "dependencies": {
     "bluebird": "^3.5.0",
     "chalk": "^2.1.0",
+    "ejs": "^2.5.7",
     "inquirer": "^3.3.0",
     "npm": "^5.4.2",
     "rimraf": "^2.6.2"

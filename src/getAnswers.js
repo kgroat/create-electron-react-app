@@ -3,9 +3,9 @@ var inquirer = require('inquirer')
 var fs = require('fs')
 
 function validateDirName (value) {
-  var dirNameRgx =  /^[a-z0-9\-]*$/
+  var dirNameRgx =  /^[a-z0-9\-_]*$/
   if (!dirNameRgx.test(value)) {
-    return 'Your directory name can only contain lowercase letters and dashes.'
+    return 'Your directory name can only contain lowercase letters, numbers, dashes, and underscores.'
   } else if (fs.existsSync(value)) {
     return 'File or directory ' + value + ' already exists.'
   } else {
