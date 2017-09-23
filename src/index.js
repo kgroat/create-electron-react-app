@@ -17,7 +17,6 @@ function changeDirectory (answers) {
 }
 
 module.exports = function() {
-  var returnAnswers
   return getAnswers()
     .then(makeDirectory)
     .then(cloneBase)
