@@ -1,6 +1,6 @@
 {
   "name": "create-electron-react-app",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "An opinionated command-line utility for creating an electron app using react",
   "main": "index.js",
   "bin": "./bin/create-electron-react-app",
