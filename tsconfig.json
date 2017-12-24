@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "es2015",
+      "es2016",
+      "es2017"
+    ],
+    "declaration": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "es2015",
+    "baseUrl": "./src"
+  },
+  "include": [
+    "./src",
+    "./index.ts"
+  ],
+  "exclude": [
+    "./node_modules"
+  ],
+  "compileOnSave": false,
+  "atom": {
+    "rewriteTsconfig": false
+  }
+}
