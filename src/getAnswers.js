@@ -1,6 +1,7 @@
 
 var inquirer = require('inquirer')
 var fs = require('fs')
+var { standardizeGitUri } = require('./updatePackage')
 
 function validateDirName (value) {
   var dirNameRgx =  /^[a-z0-9\-_]*$/
@@ -38,7 +39,7 @@ var httpRgx = /^(?:https?:\/\/)?([^/]+)\/((?:(?!\.git).)+)(?:\.git)?$/i
 
 function validateGit (value) {
   var noValue = !value
-  var isRepo = sshRgx.test(value) || httpRgx.test(value)
+  var isRepo = typeof value === 'object'
   if (noValue || isRepo) {
     return true
   } else {
@@ -48,7 +49,7 @@ function validateGit (value) {
 
 function filterGit (value) {
   if (!value) {
-    return null
+    return undefined
   }
 
   var matches, protocol, user, host, repo
@@ -65,15 +66,18 @@ function filterGit (value) {
     host = matches[1]
     repo = matches[2]
   } else {
-    return null
+    return 'fail'
   }
 
-  return {
+  const output = {
     protocol: protocol,
     user: user,
     host: host,
-    repo: repo
+    repo: repo,
+    toString: () => standardizeGitUri(output)
   }
+
+  return output
 }
 
 module.exports = function() {

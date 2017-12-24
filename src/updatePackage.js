@@ -66,3 +66,5 @@ module.exports = function (answers) {
       return answers
     })
 }
+
+module.exports.standardizeGitUri = standardizeGitUri
