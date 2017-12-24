@@ -28,6 +28,7 @@ function updatePackage (answers) {
 
     package.name = answers.dirName
     package.appName = answers.appName
+    package.identifier = answers.identifier
     package.description = answers.description
     package.author = answers.author
     package.lisence = answers.lisence
