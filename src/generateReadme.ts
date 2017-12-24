@@ -7,7 +7,6 @@ import * as Bluebird from 'bluebird'
 import { Answers } from './getAnswers'
 
 const rm = Bluebird.promisify(rimraf)
-const exists = Bluebird.promisify(fs.exists)
 const readFile = Bluebird.promisify(fs.readFile)
 const writeFile = Bluebird.promisify(fs.writeFile)
 
@@ -29,6 +28,12 @@ function replaceReadme (templatePath: string, outputPath: string, answers: Answe
     .then(function () {
       return rm(templatePath)
     })
+}
+
+function exists (path: string) {
+  return new Promise(function (resolve, reject) {
+    fs.exists(path, resolve)
+  })
 }
 
 export default function (answers: Answers) {
