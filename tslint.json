@@ -1,0 +1,9 @@
+{
+  "extends": "tslint-config-standard",
+  "rules": {
+    "trailing-comma": {
+      "options": [{ "multiline": "always", "singleline": "never" }],
+      "severity": "default"
+    }
+  }
+}

@@ -1,9 +1,10 @@
 
-var inquirer = require('inquirer')
-var fs = require('fs')
-var { standardizeGitUri } = require('./updatePackage')
+import { prompt, Question } from 'inquirer'
+import * as fs from 'fs'
+import { standardizeGitUri } from './updatePackage'
+import { dirname } from 'path';
 
-function validateDirName (value) {
+function validateDirName (value: string) {
   var dirNameRgx =  /^[a-z0-9\-_]*$/
   if (!dirNameRgx.test(value)) {
     return 'Your directory name can only contain lowercase letters, numbers, dashes, and underscores.'
@@ -14,7 +15,7 @@ function validateDirName (value) {
   }
 }
 
-function validateNotEmpty (value) {
+function validateNotEmpty (value: string) {
   if (value && value.length > 0) {
     return true
   } else {
@@ -22,22 +23,29 @@ function validateNotEmpty (value) {
   }
 }
 
-function defaultDirName (values) {
+function defaultDirName (values: Answers) {
   var appName = values.appName
   var dirName = appName.toLowerCase().replace(/[ _]/g, '-').replace(/[^a-z0-9\-]/g, '')
   return dirName
 }
 
-function defaultIdentifier (values) {
+function defaultIdentifier (values: Answers) {
   var dirName = values.dirName
   var identifier = 'com.github.' + dirName.replace(/-/g, '')
   return identifier
 }
 
+export interface GitAnswer {
+  protocol: string
+  user: string | null
+  host: string
+  repo: string
+}
+
 var sshRgx = /^(?:ssh:\/\/)?([^@]+)@([^:]+):(?:\/)?((?:(?!\.git).)+)(?:\.git)?$/i
 var httpRgx = /^(?:https?:\/\/)?([^/]+)\/((?:(?!\.git).)+)(?:\.git)?$/i
 
-function validateGit (value) {
+function validateGit (value: GitAnswer | string | undefined) {
   var noValue = !value
   var isRepo = typeof value === 'object'
   if (noValue || isRepo) {
@@ -47,24 +55,24 @@ function validateGit (value) {
   }
 }
 
-function filterGit (value) {
+function filterGit (value: string): GitAnswer | string | undefined {
   if (!value) {
     return undefined
   }
 
-  var matches, protocol, user, host, repo
+  let protocol, user, host, repo
   if (sshRgx.test(value)) {
-    var matches = sshRgx.exec(value)
+    const matches = sshRgx.exec(value)
     protocol = 'ssh'
-    user = matches[1]
-    host = matches[2]
-    repo = matches[3]
+    user = matches && matches[1]
+    host = matches && matches[2]
+    repo = matches && matches[3]
   } else if (httpRgx.test(value)) {
-    var matches = httpRgx.exec(value)
+    const matches = httpRgx.exec(value)
     protocol = 'https'
     user = null
-    host = matches[1]
-    repo = matches[2]
+    host = matches && matches[1]
+    repo = matches && matches[2]
   } else {
     return 'fail'
   }
@@ -74,14 +82,24 @@ function filterGit (value) {
     user: user,
     host: host,
     repo: repo,
-    toString: () => standardizeGitUri(output)
-  }
+    toString: (): string => standardizeGitUri(output)
+  } as GitAnswer
 
   return output
 }
 
-module.exports = function() {
-  return inquirer.prompt([
+export interface Answers {
+  appName: string
+  dirName: string
+  identifier: string
+  description: string
+  git: GitAnswer
+  author: string
+  lisence: string
+}
+
+export default function(): Promise<Answers> {
+  return prompt([
     {
       name: 'appName',
       message: 'app name (the name of the .exe or .app file)',
@@ -118,5 +136,5 @@ module.exports = function() {
       message: 'lisence',
       default: 'ISC'
     }
-  ])
+  ] as Question[]) as Promise<Answers>
 }
