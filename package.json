@@ -28,7 +28,7 @@
     "colors": "^1.1.2",
     "ejs": "^2.5.7",
     "inquirer": "^3.3.0",
-    "npm": "^5.4.2",
+    "npm": "^6.5.0",
     "rimraf": "^2.6.2"
   },
   "devDependencies": {
